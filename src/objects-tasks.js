@@ -165,8 +165,14 @@ function sellTickets(/* queue */) {
  *    console.log(r.height);      // => 20
  *    console.log(r.getArea());   // => 200
  */
-function Rectangle(/* width, height */) {
-  throw new Error('Not implemented');
+function Rectangle(width, height) {
+  return {
+    width,
+    height,
+    getArea() {
+      return width * height;
+    },
+  };
 }
 
 /**
@@ -179,8 +185,8 @@ function Rectangle(/* width, height */) {
  *    [1,2,3]   =>  '[1,2,3]'
  *    { width: 10, height : 20 } => '{"height":10,"width":20}'
  */
-function getJSON(/* obj */) {
-  throw new Error('Not implemented');
+function getJSON(obj) {
+  return JSON.stringify(obj);
 }
 
 /**
@@ -224,10 +230,15 @@ function fromJSON(/* proto, json */) {
  *      { country: 'Russia',  city: 'Saint Petersburg' }
  *    ]
  */
-function sortCitiesArray(/* arr */) {
-  throw new Error('Not implemented');
+function sortCitiesArray(arr) {
+  const valueOfKeys = [];
+  arr.forEach((element, index) => {
+    const elemKeys = Object.keys(element);
+    valueOfKeys.push(`${element[elemKeys[0]]}${element[elemKeys[1]]}-${index}`);
+  });
+  valueOfKeys.sort();
+  return valueOfKeys.map((elem) => arr[elem.slice(elem.lastIndexOf('-') + 1)]);
 }
-
 /**
  * Groups elements of the specified array by key.
  * Returns multimap of keys extracted from array elements via keySelector callback
@@ -258,8 +269,17 @@ function sortCitiesArray(/* arr */) {
  *    "Poland" => ["Lodz"]
  *   }
  */
-function group(/* array, keySelector, valueSelector */) {
-  throw new Error('Not implemented');
+function group(array, keySelector, valueSelector) {
+  const Mapp = new Map();
+  array.forEach((elem) => {
+    if (Mapp.has(keySelector(elem))) {
+      const mapElem = Mapp.get(keySelector(elem));
+      mapElem.push(valueSelector(elem));
+    } else {
+      Mapp.set(keySelector(elem), [valueSelector(elem)]);
+    }
+  });
+  return Mapp;
 }
 
 /**
